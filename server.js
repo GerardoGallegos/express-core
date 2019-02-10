@@ -11,6 +11,20 @@ app.get('/', (req, res) => {
   `)
 })
 
+app.get('/cerveza', (req, res) => {
+  res.send(`<h1>🍺</h1>`)
+})
+
+app.get('/cerveza', (req, res) => {
+  res.send(`<h1>🥦</h1>`)
+})
+
+app.get('*', (req, res) => {
+  res
+    .status(404)
+    .send(`<h1>Woops no existe esta pagina!</h1>`)
+})
+
 app.listen(PORT, () => {
   console.log(`
     Servidor corriendo en:
