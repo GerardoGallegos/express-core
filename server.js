@@ -9,32 +9,25 @@ app.get('/', (req, res) => {
   `)
 })
 
-app.get('/cervezas', (req, res) => {
+app.get('/degradado', (req, res) => {
+  const {
+    color1 = 'black',
+    color2 = 'gray',
+    rotacion = 60
+  } = req.query
+
   res.send(`
-    <style>
-
-    a {
-      display: block;
+  <style>
+  
+    body {
+      background: linear-gradient(${rotacion}deg, ${color1}, ${color2});
     }
+
+  </style>
+  <body>
     
-    </style>
-    <div>
-      <a href="/cerveza/Corona">🍺 Corona</a>
-      <a href="/cerveza/Duff">🍺 Duff</a>
-      <a href="/cerveza/Heineken">🍺 Heineken</a>
-      <a href="/cerveza/Budweiser">🍺 Budweiser</a>
-    </div>
+  </body>
   `)
-})
-
-app.get('/cerveza/:marca?', (req, res) => {
-  const { marca } = req.params
-
-  if (!marca) {
-    return res.send(`<h1>Debes indicar el nombre de la 🍺</h1>`)
-  }
-
-  res.send(`<h1>🍺: ${marca}</h1>`)
 })
 
 app.get('*', (req, res) => {
