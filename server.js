@@ -9,24 +9,9 @@ app.get('/', (req, res) => {
   `)
 })
 
-app.get('/degradado', (req, res) => {
-  const {
-    color1 = 'black',
-    color2 = 'gray',
-    rotacion = 60
-  } = req.query
-
+app.get('/user/:id([0-9]{4})', (req, res) => {
   res.send(`
-  <style>
-  
-    body {
-      background: linear-gradient(${rotacion}deg, ${color1}, ${color2});
-    }
-
-  </style>
-  <body>
-    
-  </body>
+    <h1>Ruta con RegExp ⚡️</h1>
   `)
 })
 
