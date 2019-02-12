@@ -1,19 +1,20 @@
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
 const PORT = 3000
 
-const checkAuth = (req, res, next) => {
-  const isAuth = false
+const checkAuth = (config) => {
+  const message = config.message || 'Debes iniciar Sesion 😅'
 
-  if (isAuth) {
-    next()
-  } else {
-    res.send('Debes iniciar Sesion 😅')
+  return (req, res, next) => {
+    const isAuth = false
+  
+    if (isAuth) {
+      next()
+    } else {
+      res.send(message)
+    }
   }
 }
-
-// app.use(checkAuth)
 
 app.get('/publica', (req, res) => {
   res.send(`
@@ -21,19 +22,16 @@ app.get('/publica', (req, res) => {
   `)
 })
 
-app.get('/privada', checkAuth, (req, res) => {
+const isAuthCustom = checkAuth({
+  message: 'Please Login 💂‍'
+})
+
+app.get('/privada', isAuthCustom, (req, res) => {
   res.send(`
     <h1>Ruta Privada 😎</h1>
   `)
 })
 
-
-app.get('/', (req, res) => {
-  res.send(`
-    <h1>Middleware</h1>
-    <h2>Ruta principal</h2>
-  `)
-})
 
 app.get('*', (req, res) => {
   res
