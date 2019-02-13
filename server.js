@@ -1,38 +1,46 @@
+
 const express = require('express')
 const app = express()
+const fs = require('fs')
 const PORT = 3000
-const consolidate = require('consolidate')
 
 app.set('views', './views')
-app.engine('hbs', consolidate.handlebars)
-app.set('view engine', 'hbs')
+app.set('view engine', '.ninja')
 
-app.get('/perfil', (req, res) => {
-  res.render('perfil', {
-    name: 'Gerardo Gallegos',
-    favorites: [
-       'React',
-       'Vue',
-       'Angular',
-       'RXjs',
-       'Node.js',
-       'Typescript'
-    ],
+app.engine('.ninja', (filePath, data, callback) => {
+  
+  const myData = {}
 
-    courses: [
-      { title: 'React Avanzado' },
-      { title: 'React Router' },
-      { title: 'Node.js Fundamentos' },
-      { title: 'Angular Fundamentos' }
-    ]
+  for (let key in data) {
+    if (key !== 'settings' && key !== '_locals' && key !== 'cache') {
+      myData[key] = data[key]
+    }
+  }
+
+  fs.readFile(filePath, 'utf8', (err, content) => {
+    if (err) {
+      return callback(err)
+    }
+
+    let html = content.toString()
+
+    for (let key in myData){
+      const pattern = `\\({2}(\\s+)?${key}(\\s+)?\\){2}`
+      const original = new RegExp(pattern, 'gm') // (( name))
+      const final = myData[key]
+      html = html.replace(original, final)
+    }
+
+    callback(null, html)
   })
 })
 
+
 app.get('/', (req, res) => {
-  res.send(`
-    <h1>Motores de Plantillas ⚡️</h1>
-    <h2>Template Engines</h2>
-  `)
+  res.render('home.ninja', {
+    name: 'Gerardo',
+    country: 'Mexico'
+  })
 })
 
 app.listen(PORT, () => {
