@@ -1,46 +1,43 @@
-
 const express = require('express')
 const app = express()
-const fs = require('fs')
 const PORT = 3000
 
-app.set('views', './views')
-app.set('view engine', '.ninja')
+// send
+app.get('/send', (req, res) => {
+  res.send([ 12, true, 'Fresa' ])
+})
 
-app.engine('.ninja', (filePath, data, callback) => {
-  
-  const myData = {}
-
-  for (let key in data) {
-    if (key !== 'settings' && key !== '_locals' && key !== 'cache') {
-      myData[key] = data[key]
-    }
+// json
+app.set('json spaces', 10)
+app.set('json replacer', (key, value) => {
+  if (key === 'password') {
+    return undefined
   }
 
-  fs.readFile(filePath, 'utf8', (err, content) => {
-    if (err) {
-      return callback(err)
-    }
+  return value
+})
 
-    let html = content.toString()
-
-    for (let key in myData){
-      const pattern = `\\({2}(\\s+)?${key}(\\s+)?\\){2}`
-      const original = new RegExp(pattern, 'gm') // (( name))
-      const final = myData[key]
-      html = html.replace(original, final)
-    }
-
-    callback(null, html)
+app.get('/json', (req, res) => {
+  res
+  .status(200)
+  .json({
+    name: 'Geraro',
+    age: 29,
+    country: 'Mexico',
+    password: '123'
   })
 })
 
-
-app.get('/', (req, res) => {
-  res.render('home.ninja', {
-    name: 'Gerardo',
-    country: 'Mexico'
+// download
+app.get('/download', (req, res) => {
+  res.download('./documento.pdf', 'reporte.pdf', (err) => {
+    // manejar error
   })
+})
+
+// end
+app.get('/end', (req, res) => {
+  res.status(404).end()
 })
 
 app.listen(PORT, () => {
