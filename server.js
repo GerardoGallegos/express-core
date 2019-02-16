@@ -1,14 +1,13 @@
 const express = require('express')
 const app = express()
-const user = require('./controllers/users')
+const routes = require('./routes')
+const bodyParser = require('body-parser')
 const PORT = 3000
 
-app.route('/user')
-  .get(user.get)
-  .post(user.post)
-  .put(user.put)
-  .delete(user.delete)
+require('./database')
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(routes)
 
 app.listen(PORT, () => {
   console.log(`
