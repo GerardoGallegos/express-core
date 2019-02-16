@@ -1,8 +1,20 @@
 const { userDB: DB } = require('../database')
 
 module.exports = {
-  getAll (req, res) {
+  getAll (req, res, next) {
+
+    const err = new Error('No tienes los permisos')
+
+    err.statusHTTP = 401
+
+    throw err
+
     DB.find({}, (err, users) => {
+
+      if (err) {
+        return next(err)
+      }
+
       res.json(users)
     })
   },
