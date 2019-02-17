@@ -17,7 +17,8 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "handlebars": "^4.1.0",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "nedb-session-store": "^1.1.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
